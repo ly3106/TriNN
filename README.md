@@ -1,4 +1,6 @@
-# Point-GNN
+# TriNN
+
+This repository forked and modified from [WeijingShi/Point-GNN](https://github.com/WeijingShi/Point-GNN).
 
 This repository contains a reference implementation of our [Point-GNN: Graph Neural Network for 3D Object Detection in a Point Cloud](http://openaccess.thecvf.com/content_CVPR_2020/papers/Shi_Point-GNN_Graph_Neural_Network_for_3D_Object_Detection_in_a_CVPR_2020_paper.pdf), CVPR 2020. 
 
