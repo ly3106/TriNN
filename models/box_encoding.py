@@ -490,6 +490,8 @@ def get_box_decoding_fn(encoding_method_name):
     }
     return decoding_method_dict[encoding_method_name]
 
+# 获取box编码数据的长度，即一个box由几个数据表示
+# 其文章中采用classaware_all_class_box_encoding (x, y, z, l, h, w, θ)
 def get_encoding_len(encoding_method_name):
     encoding_len_dict = {
         'direct_encoding': 7,
