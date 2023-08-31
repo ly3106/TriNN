@@ -8,6 +8,8 @@ from sklearn.neighbors import NearestNeighbors
 import open3d
 import tensorflow as tf
 
+from my_fun.graph_generator import generate_graph_edges
+
 def multi_layer_downsampling(points_xyz, base_voxel_size, levels=[1],
     add_rnd3d=False,):
     """Downsample the points using base_voxel_size at different scales"""
@@ -38,9 +40,9 @@ def multi_layer_downsampling(points_xyz, base_voxel_size, levels=[1],
                     sorted_points_xyz, indices, axis=0)/lens[:,np.newaxis]
                 downsampled_list.append(np.array(downsampled_xyz))
             else:
-                pcd = open3d.PointCloud()
-                pcd.points = open3d.Vector3dVector(points_xyz)
-                downsampled_xyz = np.asarray(open3d.voxel_down_sample(
+                pcd = open3d.geometry.PointCloud()
+                pcd.points = open3d.utility.Vector3dVector(points_xyz)
+                downsampled_xyz = np.asarray(open3d.geometry.PointCloud.voxel_down_sample(
                     pcd, voxel_size = base_voxel_size*level).points)
                 downsampled_list.append(downsampled_xyz)
         last_level = level
@@ -219,9 +221,26 @@ def gen_disjointed_rnn_local_graph_v3(
     vertices = np.array([vertices_v, vertices_i]).transpose()
     return vertices
 
+def gen_delaunay_global_graph(
+        points_xyz, center_xyz, radius, num_neighbors,
+        neighbors_downsample_method='random',
+        scale=None):
+    """generate delaunay global graph with no downsampling point (the row point)"""
+    return  generate_graph_edges(
+        center_xyz, max_distance = radius, make_undirected = True, add_self_loops = True)
+
+def gen_delaunay_global_graph_no_dsmpl(
+        points_xyz, center_xyz, radius, num_neighbors,
+        neighbors_downsample_method='random',
+        scale=None):
+    return  generate_graph_edges(
+        points_xyz, max_distance = radius, make_undirected = True, add_self_loops = True)
+
 def get_graph_generate_fn(method_name):
     method_map = {
         'disjointed_rnn_local_graph_v3':gen_disjointed_rnn_local_graph_v3,
         'multi_level_local_graph_v3': gen_multi_level_local_graph_v3,
+        'delaunay_global_graph': gen_delaunay_global_graph,
+        'gen_delaunay_global_graph_no_dsmpl': gen_delaunay_global_graph_no_dsmpl,
     }
     return method_map[method_name]
