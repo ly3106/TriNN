@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONFIGS_NAME="car_auto_T3_rnn_del_focal_l1l2_train"  # Need to set
-ACTIVATE_ENV="conda activate nvtf1.15"  # Need to set
+ACTIVATE_ENV="conda activate tf1.15.0"  # Need to set
 
 TRAIN_DIR="./checkpoints/${CONFIGS_NAME}/"
 
