@@ -8,8 +8,8 @@ TRAIN_DIR="./checkpoints/${CONFIGS_NAME}/"
 # --dataset_split_file to set
 PY_CMD="python train_v3_mod_graph_gen.py \
 --dataset_split_file ./splits/train_car.txt \
-configs/${CONFIGS_NAME}/train_config \
-configs/${CONFIGS_NAME}/config"
+configs/${CONFIGS_NAME}/train_config.json \
+configs/${CONFIGS_NAME}/config.json"
 
 mkdir ${TRAIN_DIR}
 

@@ -1,15 +1,15 @@
 #!/bin/bash
 
-CONFIGS_NAME="car_auto_T4_train"  # Need to set
+CONFIGS_NAME="ped_cyl_auto_T3_trainval"  # Need to set
 ACTIVATE_ENV="conda activate nvtf1.15"  # Need to set
 
-TRAIN_DIR="./checkpoints/${CONFIGS_NAME}/"
+TRAIN_DIR="./checkpoints/0_checkpoints_Point-GNN_original/${CONFIGS_NAME}/"
 
 # --dataset_split_file to set
 PY_CMD="python run_v3_mod_graph_gen.py \
 ${TRAIN_DIR} \
+--test \
 --dataset_root_dir ../dataset/kitti \
---dataset_split_file ./splits/3DOP_splits/val.txt \
 --output_dir ${TRAIN_DIR} \
 --level 1"
 

@@ -48,7 +48,7 @@
     "decay_factor": 0.1,
     "decay_step": 400000,
     "gpu_memusage": -1,
-    "initial_lr": 0.09375,
+    "initial_lr": 0.125,
     "load_dataset_every_N_time": 0,
     "load_dataset_to_mem": true,
     "max_epoch": 1718,
@@ -58,7 +58,7 @@
     "optimizer_kwargs": {},
     "save_every_epoch": 1,
     "train_dataset": "train_car.txt",
-    "train_dir": "./checkpoints/car_auto_T4_train",
+    "train_dir": "./checkpoints/car_auto_T7_rnn_del_focal_l1l2_train",
     "unify_copies": true,
     "visualization": false
 }
