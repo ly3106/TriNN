@@ -4,6 +4,8 @@ def process_file(input_path, output_path):
     with open(input_path, 'r') as input_file:
         lines = input_file.readlines()
 
+    # NOTE: (中) 根据您的需求，可能需要调整score阈值。
+    # NOTE: (EN) Adjust the score threshold as needed based on your requirements.
     filtered_lines = [line for line in lines if line.strip() and float(line.split()[-1]) >= 6.59]
 
     with open(output_path, 'w') as output_file:

@@ -33,9 +33,9 @@ def merge_folders(folder1, folder2, output_folder):
                 output_file.write(merged_content)
 
 if __name__ == "__main__":
-    folder1_path = "/media/bit202/8EB8D6CCB8D6B247/Users/Public/Documents/YuanLi/Point-GNN_v0.6.1_论文写完发现没用PointNet聚合降采样信息改为car_auto_T4_rnn_del、使用sh运行_双3090/checkpoints/car_auto_T4_rnn_del_focal_l1l2_trainval_0.6.6/data"
-    folder2_path = "/media/bit202/8EB8D6CCB8D6B247/Users/Public/Documents/YuanLi/Point-GNN_v0.6.1_论文写完发现没用PointNet聚合降采样信息改为car_auto_T4_rnn_del、使用sh运行_双3090/checkpoints/ped_cyl_auto_T4_rnn_del_focal_l1l2_trainval_0.6.5/评估结果 on test_nms0.2/data"
-    output_folder_path = "/home/bit202/桌面/filtered_合并"
+    folder1_path = "/media/bit202/8EB8D6CCB8D6B247/Users/Public/Documents/TriNN/checkpoints/car_auto_T4_rnn_del_focal_l1l2_trainval/data"
+    folder2_path = "/media/bit202/8EB8D6CCB8D6B247/Users/Public/Documents/TriNN/checkpoints/ped_cyl_auto_T4_rnn_del_focal_l1l2_trainval/data"
+    output_folder_path = "/home/bit2/桌面/filtered_merge"
 
     merge_folders(folder1_path, folder2_path, output_folder_path)
 
