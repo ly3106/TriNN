@@ -6,8 +6,8 @@ ACTIVATE_ENV="conda activate nvtf1.15"  # Need to set
 TRAIN_DIR="./checkpoints/${CONFIGS_NAME}/"
 
 # --dataset_split_file to set
-PY_CMD="python train_v3_mod_graph_gen.py \
---dataset_split_file ./splits/train_car.txt \
+PY_CMD="python train_for_kitti.py \
+--dataset_split_file splits/kitti/train_car.txt \
 configs/0_configs_Point-GNN_original_sh/${CONFIGS_NAME}/train_config.json \
 configs/0_configs_Point-GNN_original_sh/${CONFIGS_NAME}/config.json"
 
@@ -21,7 +21,7 @@ gnome-terminal --tab -t "record CPU" -- bash -c "mpstat -P ALL ${INTERVAL}  2>&1
 gnome-terminal --tab -t "record GPU" -- bash -c "nvidia-smi -l ${INTERVAL}  2>&1 | tee -a ${TRAIN_DIR}训练中GPU信息.txt"&
 
 sleep 2s
-gnome-terminal --tab --active -t "record run.py" -- bash -ic "
+gnome-terminal --tab --active -t "record train.py" -- bash -ic "
 ${ACTIVATE_ENV}
 ${PY_CMD} 2>&1 | tee -a ${TRAIN_DIR}训练打印信息.txt
 exec bash"&

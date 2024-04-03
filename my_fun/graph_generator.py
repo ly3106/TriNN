@@ -15,6 +15,7 @@ import tensorflow as tf
 # from dataset.kitti_data_parse import parse_kitti_args
 import numpy as np
 # import matplotlib.pyplot as plt
+from my_fun.range_belt_2d_delaunay import range_belt_2d_delaunay
 
 Points = namedtuple('Points', ['xyz', 'attr'])
 
@@ -179,6 +180,43 @@ def generate_line_set_with_2D_delaunay(points_xyz, xy):
     # triangle_line_set.points = point_cloud.points
     return triangle_line_set
 
+def generate_line_set_with_range_belt_2D_delaunay(points_xyz, xy):
+    ''' 使用深度带的2D Delaunay三角剖分生成图拓扑结构
+
+    Args:
+    points_xyz: a numpy array[n, 3], including n raw 3D points,and each point includes (x, y, z);
+                        一个[n, 3]的numpy数组，其包括n个3D点，每个3D点包含(x, y, z) 3个坐标元素；
+
+    xy: a numpy array [n, 2] including n 2D points projected by the points_xyz, and each point includes (x, y).
+        一个[n, 2]的numpy数组，其包含n个2D点，这些2D点是points_xyz经过某种投影得来的，每个点包含(x, y) 2个坐标元素。
+
+    Return: a o3d.geometry.LineSet including [n, 3] points and [m, 2] lines. There are total m lines, and each lines included by 2 ints that indicate the index of points
+                    一个o3d.geometry.LineSet对象，其由 [n, 3]个点和[m, 2]个线对组成。共有m个线对，每个线对由两个整数组成，这个整数代表对应点的下标索引
+    '''
+
+    point_cloud = o3d.geometry.PointCloud()
+    point_cloud.points = o3d.utility.Vector3dVector(points_xyz)
+
+    # xoy_r = np.sqrt(pow(xyz[:, 0], 2) + pow(xyz[:, 1], 2))
+    # azimuth = np.arctan2(xyz[:, 1], xyz[:, 0])
+    # elevation = np.arctan2(xyz[:, 2], xoy_r)
+    azimuth_resolution_rad = 0.09 * math.pi / 180  # NOTE: 0.09超参数需要调整
+    # azimuth_norm = azimuth / azimuth_resolution_rad
+    elevation_resolution_rad = 26.8 * math.pi / 180 / (64 - 1)  # NOTE: 26.8、64超参数需要调整
+    # elevation_norm = elevation / elevation_resolution_rad
+
+    tri = range_belt_2d_delaunay(theta=xy[:,0], z=xy[:,1], steiner_theta_delta=azimuth_resolution_rad * 256,
+                                 theta_extend_width=azimuth_resolution_rad * 4., theta_prune_proportion= 0.5,
+                                 steiner_theta_offset=azimuth_resolution_rad * 3.,
+                                 steiner_z_offset=elevation_resolution_rad * 3.)
+
+    triangle_mesh = o3d.geometry.TriangleMesh()
+    triangle_mesh.vertices = point_cloud.points
+    triangle_mesh.triangles = o3d.utility.Vector3iVector(np.asarray(tri))
+    triangle_line_set = o3d.geometry.LineSet.create_from_triangle_mesh(triangle_mesh)
+    # triangle_line_set.points = point_cloud.points
+    return triangle_line_set
+
 
 '''
 def generate_graph_with_triangle_line_set(triangle_line_set):
@@ -244,11 +282,43 @@ def check_for_duplicate_edges(lines):
             edge_dict[(start, end)] = True
 
 
-def generate_graph_edges(
+def generate_graph_edges_of_2D_delaunay(
         points_xyz: np.array, max_distance=1.,
         make_undirected=False, add_self_loops=False) -> np.array:  # TODO: 这个值是超参数需要调节
     xy = generate_range_image_xy(points_xyz)  # - [0., 0., 100.]
     line_set = generate_line_set_with_2D_delaunay(points_xyz, xy)
+    lines = np.asarray(line_set.lines)
+    # check_for_duplicate_edges(lines)
+
+    # 计算每条边的长度
+    coords = np.asarray(line_set.points)
+    dists = np.linalg.norm(coords[lines[:, 0]] - coords[lines[:, 1]], axis=1)
+
+    # （中）挑选出边长小于最大距离上限的边
+    # (En) Select the edges whose distance is less than the max distance (i.e. the upper limit of the distance)
+    mask = dists < max_distance
+    selected_lines = lines[mask]
+
+    # （中）添加反向边，使其成为无向图
+    # (EN) Add reverse edges, make it to undirected graph
+    if make_undirected:
+        selected_lines = np.vstack([selected_lines, selected_lines[:, ::-1]])
+
+    # （中）添加自环
+    # (EN) Add self loop
+    # all_nodes = np.unique(selected_lines)
+    if add_self_loops:
+        all_nodes = np.arange(coords.shape[0])
+        self_connections = np.stack([all_nodes, all_nodes], axis=1)
+        selected_lines = np.vstack([selected_lines, self_connections])
+
+    return selected_lines  # lines
+
+def generate_graph_edges_of_range_belt_2D_delaunay(
+        points_xyz: np.array, max_distance=1.,
+        make_undirected=False, add_self_loops=False) -> np.array:  # NOTE: 这个值是超参数需要调节
+    xy = generate_range_image_xy(points_xyz)
+    line_set = generate_line_set_with_range_belt_2D_delaunay(points_xyz, xy)
     lines = np.asarray(line_set.lines)
     # check_for_duplicate_edges(lines)
 
@@ -437,7 +507,7 @@ def visualize_graph():
     point_cloud = o3d.geometry.PointCloud()
     point_cloud.points = o3d.utility.Vector3dVector(xyz)
 
-    edges = generate_graph_edges(xyz, make_undirected=True, add_self_loops=True)
+    edges = generate_graph_edges_of_2D_delaunay(xyz, make_undirected=True, add_self_loops=True)
 
     line_set = o3d.geometry.LineSet(
         points=point_cloud.points,

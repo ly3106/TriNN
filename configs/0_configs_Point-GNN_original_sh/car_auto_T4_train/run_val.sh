@@ -3,13 +3,13 @@
 CONFIGS_NAME="car_auto_T4_train"  # Need to set
 ACTIVATE_ENV="conda activate nvtf1.15"  # Need to set
 
-TRAIN_DIR="./checkpoints/${CONFIGS_NAME}/"
+TRAIN_DIR="./checkpoints/kitti/${CONFIGS_NAME}/"
 
 # --dataset_split_file to set
-PY_CMD="python run_v3_mod_graph_gen.py \
+PY_CMD="python run_for_kitti.py \
 ${TRAIN_DIR} \
 --dataset_root_dir ../dataset/kitti \
---dataset_split_file ./splits/3DOP_splits/val.txt \
+--dataset_split_file splits/kitti/3DOP_splits/val.txt \
 --output_dir ${TRAIN_DIR} \
 --level 1"
 

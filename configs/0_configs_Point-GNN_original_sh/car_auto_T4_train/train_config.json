@@ -58,7 +58,7 @@
     "optimizer_kwargs": {},
     "save_every_epoch": 1,
     "train_dataset": "train_car.txt",
-    "train_dir": "./checkpoints/car_auto_T4_train",
+    "train_dir": "./checkpoints/kitti/car_auto_T4_train",
     "unify_copies": true,
     "visualization": false
 }

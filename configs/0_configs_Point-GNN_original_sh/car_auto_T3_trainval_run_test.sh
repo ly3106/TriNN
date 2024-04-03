@@ -6,7 +6,7 @@ ACTIVATE_ENV="conda activate nvtf1.15"  # Need to set
 TRAIN_DIR="./checkpoints/0_checkpoints_Point-GNN_original/${CONFIGS_NAME}/"
 
 # --dataset_split_file to set
-PY_CMD="python run_v3_mod_graph_gen.py \
+PY_CMD="python run_for_kitti.py \
 ${TRAIN_DIR} \
 --test \
 --dataset_root_dir ../dataset/kitti \

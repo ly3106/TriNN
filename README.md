@@ -2,9 +2,9 @@
 
 This repository forked and modified from [WeijingShi/Point-GNN](https://github.com/WeijingShi/Point-GNN).
 
-This repository contains a reference implementation of our [Point-GNN: Graph Neural Network for 3D Object Detection in a Point Cloud](http://openaccess.thecvf.com/content_CVPR_2020/papers/Shi_Point-GNN_Graph_Neural_Network_for_3D_Object_Detection_in_a_CVPR_2020_paper.pdf), CVPR 2020. 
+This repository contains a reference implementation of original [Point-GNN: Graph Neural Network for 3D Object Detection in a Point Cloud](http://openaccess.thecvf.com/content_CVPR_2020/papers/Shi_Point-GNN_Graph_Neural_Network_for_3D_Object_Detection_in_a_CVPR_2020_paper.pdf), CVPR 2020. 
 
-If you find this code useful in your research, please consider citing our work:
+If you find this code useful in your research, please consider citing this work:
 ```
 @InProceedings{Point-GNN,
 author = {Shi, Weijing and Rajkumar, Ragunathan (Raj)},
@@ -61,26 +61,39 @@ We use the KITTI 3D Object Detection dataset. Please download the dataset from t
         ├── train_car.txt
         └── ...
 
-### Download Point-GNN
+### Waymo Open Dataset
+The Waymo Open Dataset should be converted to kitti format using [MMdetection3D v1.1.0](https://mmdetection3d.readthedocs.io/en/v1.1.0/user_guides/dataset_prepare.html), If you want to use it.
+
+### Dataset directory
+Organize your datasets into the structure outlined below. If your dataset is located in a different directory, consider creating a symbolic link to the specified directories.
+
+    PARENT_DIR
+    ├── dataset
+    │   ├── kitti
+    │   └── waymo_kitti
+    └── TriNN
+        └── ...
+
+### Download TriNN
 
 Clone the repository recursively:
 ```
-git clone https://github.com/WeijingShi/Point-GNN.git --recursive
+git clone https://github.com/ly3106/TriNN.git --recursive
 ```
 
 ## Inference
 ### Run a checkpoint
 Test on the validation split:
 ```
-python3 run.py checkpoints/car_auto_T3_train/ --dataset_root_dir DATASET_ROOT_DIR --output_dir DIR_TO_SAVE_RESULTS
+python3 run_for_kitti.py checkpoints/car_auto_T3_train/ --dataset_root_dir DATASET_ROOT_DIR --output_dir DIR_TO_SAVE_RESULTS
 ```
 Test on the test dataset:
 ```
-python3 run.py checkpoints/car_auto_T3_trainval/ --test --dataset_root_dir DATASET_ROOT_DIR --output_dir DIR_TO_SAVE_RESULTS
+python3 run_for_kitti.py checkpoints/car_auto_T3_trainval/ --test --dataset_root_dir DATASET_ROOT_DIR --output_dir DIR_TO_SAVE_RESULTS
 ```
 
 ```
-usage: run.py [-h] [-l LEVEL] [--test] [--no-box-merge] [--no-box-score]
+usage: run_for_kitti.py [-h] [-l LEVEL] [--test] [--no-box-merge] [--no-box-score]
               [--dataset_root_dir DATASET_ROOT_DIR]
               [--dataset_split_file DATASET_SPLIT_FILE]
               [--output_dir OUTPUT_DIR]
@@ -108,6 +121,9 @@ optional arguments:
                         Path to save the detection
                         resultsDefault="CHECKPOINT_PATH/eval/"
 ```
+If you want to perform inference on the Waymo Open Dataset, you should use `run_for_waymo_kitti.py` instead of `run_for_kitti.py` in above instructions.
+Alternatively, you can run the `.sh` files in each config folder to automatically execute the script and log the resource usage of hardware. The `sh` files can be found in the `configs/` directory. Before running the `sh` files, you should adjust their contents to match your environment.
+
 ### Performance
 Install kitti_native_evaluation offline evaluation:
 ```
@@ -143,8 +159,11 @@ optional arguments:
 ```
 For example:
 ```
-python3 train.py configs/car_auto_T3_train_train_config configs/car_auto_T3_train_config
+python3 train_for_kitti.py configs/car_auto_T3_train_train_config configs/car_auto_T3_train_config
 ```
+If you want to perform inference on the Waymo Open Dataset, you should use `train_for_waymo_kitti.py` instead of `train_for_kitti.py` in above instructions.
+Alternatively, you can run the `.sh` files in each config folder to automatically execute the script and log the resource usage of hardware. The `sh` files can be found in the `configs/` directory. Before running the `sh` files, you should adjust their contents to match your environment.
+
 We strongly recommand readers to view the train_config before starting the training. 
 Some common parameters which you might want to change first:
 ```

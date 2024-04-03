@@ -8,7 +8,7 @@ from sklearn.neighbors import NearestNeighbors
 import open3d
 import tensorflow as tf
 
-from my_fun.graph_generator import generate_graph_edges
+from my_fun.graph_generator import generate_graph_edges_of_2D_delaunay, generate_graph_edges_of_range_belt_2D_delaunay
 
 def multi_layer_downsampling(points_xyz, base_voxel_size, levels=[1],
     add_rnd3d=False,):
@@ -225,22 +225,32 @@ def gen_delaunay_global_graph(
         points_xyz, center_xyz, radius, num_neighbors,
         neighbors_downsample_method='random',
         scale=None):
-    """generate delaunay global graph with no downsampling point (the row point)"""
-    return  generate_graph_edges(
+    """generate delaunay global graph with downsampling point"""
+    return  generate_graph_edges_of_2D_delaunay(
         center_xyz, max_distance = radius, make_undirected = True, add_self_loops = True)
 
 def gen_delaunay_global_graph_no_dsmpl(
         points_xyz, center_xyz, radius, num_neighbors,
         neighbors_downsample_method='random',
         scale=None):
-    return  generate_graph_edges(
+    """generate delaunay global graph with no downsampling point (the raw point)"""
+    return  generate_graph_edges_of_2D_delaunay(
         points_xyz, max_distance = radius, make_undirected = True, add_self_loops = True)
+
+def gen_range_belt_2d_delaunay_global_graph(
+        points_xyz, center_xyz, radius, num_neighbors,
+        neighbors_downsample_method='random',
+        scale=None):
+    """generate delaunay global graph with downsampling point"""
+    return  generate_graph_edges_of_range_belt_2D_delaunay(
+        center_xyz, max_distance = radius, make_undirected = True, add_self_loops = True)
 
 def get_graph_generate_fn(method_name):
     method_map = {
         'disjointed_rnn_local_graph_v3':gen_disjointed_rnn_local_graph_v3,
         'multi_level_local_graph_v3': gen_multi_level_local_graph_v3,
         'delaunay_global_graph': gen_delaunay_global_graph,
+        'range_belt_2d_delaunay_global_graph': gen_range_belt_2d_delaunay_global_graph,
         'gen_delaunay_global_graph_no_dsmpl': gen_delaunay_global_graph_no_dsmpl,
     }
     return method_map[method_name]

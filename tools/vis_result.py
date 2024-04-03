@@ -22,7 +22,7 @@ from models import preprocess
 from models import nms
 from util.config_util import load_config, load_train_config
 from util.summary_util import write_summary_scale
-from my_fun.graph_generator import generate_graph_edges
+from my_fun.graph_generator import generate_graph_edges_of_2D_delaunay
 
 parser = argparse.ArgumentParser(description='Point-GNN inference on KITTI')
 parser.add_argument('checkpoint_path', type=str,

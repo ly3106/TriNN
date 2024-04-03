@@ -1,0 +1,1 @@
+grep -Rl "Car" ./ | xargs -I {} basename {} | sed 's/\.[^.]*$//' | sort > ~/_car.txt
