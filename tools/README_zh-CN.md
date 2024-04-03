@@ -10,7 +10,8 @@
     │    └─── move_file.py
     └─── for_waymo_kitti
          ├─── grep_car_to_txt.sh
-         └─── grep_pedestrian_cyclist_to_txt.sh
+         ├─── grep_pedestrian_cyclist_to_txt.sh
+         └─── read_and_tanh_scores.py
 ## 1. `for_kitti`
 这个目录中的工具旨在后处理`run_for_kitti.py`生成的`txt`文件。它们用于生成最终提交到KITTI官网的文件。
 
@@ -38,4 +39,7 @@ filter_score_ped_cyl.py
 可以使用各种工具来可视化这些`txt`文件，类似于可视化KITTI的标注了的数据。很多工具都可以用于此目的，比如KITTI自己的MATLAB工具。
 
 ## 2. `for_waymo_kitti`
+### 2.1 `.sh`
 这些bash脚本用于提取包含特定对象的WOD的`ImageSets`文件。生成的文件已经放在`splits/waymo_kitti/include_objects`中了。
+### 2.2 `read_and_tanh_scores.py`
+使用`tanh`函数将Score转换为[0,1]区间。详细使用方法，请参见[此处](../README.md)的“Submission”部分。"

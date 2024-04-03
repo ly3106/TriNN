@@ -182,7 +182,17 @@ You can use tensorboard to view the training and evaluation status.
 ```
 tensorboard --logdir=./train_dir
 ```
-
+## Submission
+### kitti
+Reference [here](tools/README.md).
+### waymo_kitti
+1. Converter these KITTI-format `.txt` files to waymo `.bin` files using [waymo_kitti_converter](https://github.com/ly3106/waymo_kitti_converter)'s [tool](https://github.com/ly3106/waymo_kitti_converter?tab=readme-ov-file#convert-kitti-format-results-to-wod-format-results).
+2. Converter the scores into [0,1] with `tanh`
+```bash
+conda activate openmmlab140
+python tools/waymo_kitti/read_and_tanh_scores.py waymo_submission/comb-resault.bin
+```
+3. Evaluate locally or submit to WOD official website following [WOD library](https://github.com/waymo-research/waymo-open-dataset/tree/v1.5.0)'s [instruction](https://github.com/waymo-research/waymo-open-dataset/blob/v1.5.0/docs/quick_start.md) or [tutorial](https://github.com/waymo-research/waymo-open-dataset/blob/v1.5.0/tutorial/tutorial.ipynb).
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
