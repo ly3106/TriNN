@@ -1,5 +1,19 @@
 # TriNN
 
+If you find this code useful in your research, please consider citing our work:
+```
+@ARTICLE{10547414,
+  author={Li, Yuanyuan and Zou, Yuan and Zhang, Xudong and Zang, Zheng and Li, Xingkun and Sun, Wenjing and Tang, Jiaqiao},
+  journal={IEEE Transactions on Intelligent Vehicles}, 
+  title={TriNN: A Concise, Lightweight, and Fast Global Triangulation GNN for Point Cloud}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-17},
+  keywords={Point cloud compression;Kernel;Laser radar;Belts;Intelligent vehicles;Convolutional codes;Convolutional neural networks;Delaunay triangulation;Deep learning;Range belt;Range plane;Graph Neural Networks (GNNs);Object detection;Point cloud},
+  doi={10.1109/TIV.2024.3409365}}
+```
+
 This repository forked and modified from [WeijingShi/Point-GNN](https://github.com/WeijingShi/Point-GNN).
 
 This repository contains a reference implementation of original [Point-GNN: Graph Neural Network for 3D Object Detection in a Point Cloud](http://openaccess.thecvf.com/content_CVPR_2020/papers/Shi_Point-GNN_Graph_Neural_Network_for_3D_Object_Detection_in_a_CVPR_2020_paper.pdf), CVPR 2020. 
